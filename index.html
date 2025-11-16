@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan Spesial untuk Rifa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            background: white;
+            max-width: 500px;
+            width: 100%;
+            min-height: 600px;
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            padding: 40px;
+            min-height: 600px;
+            animation: slideIn 0.5s ease;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* STIKER STYLES */
+        .sticker {
+            position: absolute;
+            z-index: 10;
+            animation: popIn 0.5s ease;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.2) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .sticker-1 {
+            top: 40px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .sticker-2 {
+            bottom: 80px;
+            right: 20px;
+            width: 90px;
+            height: 90px;
+            display: none;
+            object-fit: contain;
+        }
+
+        .sticker-2.show {
+            display: block;
+        }
+
+        .sticker-3 {
+            bottom: 0px;
+            right: 0px;
+            width: 120px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Slide 1 - Welcome */
+        .welcome-title {
+            font-size: 3em;
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .welcome-text {
+            text-align: center;
+            font-size: 1.3em;
+            color: #555;
+            margin: 20px 0;
+        }
+
+        /* Slide 2 - Photo */
+        .photo-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            border: 5px solid #667eea;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            color: #999;
+            font-size: 4em;
+        }
+
+        /* Message Box */
+        .message {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            line-height: 1.8;
+            color: #333;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Interactive Question */
+        .question {
+            text-align: center;
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-no {
+            background: #f0f0f0;
+            color: #666;
+            position: relative;
+        }
+
+        .btn-no:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-no.run-away {
+            position: fixed;
+            transition: all 0.3s ease;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-top: 30px;
+            align-self: center;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Response Message */
+        .response {
+            text-align: center;
+            font-size: 1.2em;
+            color: #667eea;
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Progress Indicator */
+        .progress {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        /* Confetti for final slide */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #667eea;
+            animation: confetti-fall 3s ease-in-out infinite;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100%) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(600px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .emoji {
+            font-size: 3em;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        h2 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 15px;
+                min-height: 500px;
+            }
+            
+            .slide {
+                padding: 25px;
+                min-height: 500px;
+            }
+            
+            .welcome-title {
+                font-size: 2em;
+            }
+            
+            .btn {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+
+            .sticker-1 {
+                width: 70px;
+                height: 70px;
+            }
+
+            .sticker-2 {
+                width: 60px;
+                height: 60px;
+                bottom: 80px;
+            }
+
+            .sticker-3 {
+                width: 90px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Slide 1: Welcome -->
+        <div class="slide active" id="slide1">
+            <div class="progress">1/6</div>
+            <div class="welcome-title">🌸</div>
+            <h2>Hai, Rifa!</h2>
+            <p class="welcome-text">Aku ingin menyampaikan pesan spesial untukmu...</p>
+            <p class="welcome-text" style="font-size: 1em; color: #999;">Klik tombol di bawah untuk membuka pesannya! 👇</p>
+            <button class="btn btn-next" onclick="nextSlide(2)">Buka Pesan 💌</button>
+        </div>
+
+        <!-- Slide 2: Photo -->
+        <div class="slide" id="slide2">
+            <div class="progress">2/6</div>
+            <h2>Ini Kamu Kan? 😊</h2>
+            <div class="photo-container">
+                <!-- GANTI LINK FOTO RIFA DI SINI -->
+                <img src="https://i.imgur.com/UuwoHT1.png" alt="Rifa">
+            </div>
+            <div class="message">
+                <p style="text-align: center;">Yeay!!!, pesan ini memang untuk kamu, Rifa Salsabila Putri! ✨</p>
+            </div>
+            <button class="btn btn-next" onclick="nextSlide(3)">Lanjut 👉</button>
+        </div>
+
+        <!-- Slide 3: Message 1 + STIKER 1 -->
+        <div class="slide" id="slide3">
+            <div class="progress">3/6</div>
+            
+            <!-- STIKER 1 - GANTI LINK GIF/PNG DI SINI -->
+            <img src="https://i.imgur.com/bgxhFWq.gif" alt="sticker" class="sticker sticker-1">
+            
+            <h2>Pesan Pertama</h2>
+            <div class="message">
+                <p>Halo Rifa! 👋</p>
+                <p>Hari ini mungkin hari yang biasa saja, tapi Aku mau ngirim sedikit kebahagiaan untukmu melalui bunga ini. 💐</p>
+                <p>Semoga kamu selalu dalam keadaan sehat dan bahagia ya!</p>
+            </div>
+            <button class="btn btn-next" onclick="nextSlide(4)">Next 🌟</button>
+        </div>
+
+        <!-- Slide 4: Interactive Question 1 -->
+        <div class="slide" id="slide4">
+            <div class="progress">4/6</div>
+            <div class="emoji">🎓</div>
+            <p class="question">Kuliah kamu lancar kan?</p>
+            <div class="button-group">
+                <button class="btn btn-yes" onclick="answerQuestion('yes4')">Lancar! ✅</button>
+                <button class="btn btn-no" id="btnNo4" onclick="answerQuestion('no4')">Agak Berat 😅</button>
+            </div>
+            <div class="response" id="response4"></div>
+            <button class="btn btn-next" onclick="nextSlide(5)" style="display: none;" id="next4">Lanjut 👉</button>
+        </div>
+
+        <!-- Slide 5: Interactive Question 2 + STIKER 2 -->
+        <div class="slide" id="slide5">
+            <div class="progress">5/6</div>
+            
+            <!-- STIKER 2 - GANTI LINK GIF/PNG DI SINI (muncul setelah jawab) -->
+            <img src="https://i.imgur.com/Sw80Siy.gif" alt="sticker" class="sticker sticker-2" id="sticker2">
+            
+            <div class="emoji">😄</div>
+            <p class="question">Kamu hari ini udah senyum belum?</p>
+            <div class="button-group">
+                <button class="btn btn-yes" onclick="answerQuestion('yes5')">Udah dong! 😊</button>
+                <button class="btn btn-no" id="btnNo5" onclick="runAway(event)">Belum nih... 😔</button>
+            </div>
+            <div class="response" id="response5"></div>
+            <button class="btn btn-next" onclick="nextSlide(6)" style="display: none;" id="next5">Lanjut 👉</button>
+        </div>
+
+        <!-- Slide 6: Final Message + STIKER 3 -->
+        <div class="slide" id="slide6">
+            <div class="progress">6/6</div>
+            
+            <!-- STIKER 3 - GANTI LINK PNG DI SINI -->
+            <img src="https://i.imgur.com/BPC4kUw.png" alt="sticker" class="sticker sticker-3">
+            
+            <h2>Pesan Terakhir 💫</h2>
+            <div class="message">
+                <p>Rifa, tetaplah menjadi diri sendiri ya!. Kamu adalah sosok yang berharga dan istimewa! ⭐</p>
+                <p>Semoga perjalanan kuliahmu lancar, semua cita-citamu tercapai, dan kamu selalu dikelilingi orang-orang baik.</p>
+                <p style="margin-top: 20px; font-weight: bold; text-align: center;">Tetap semangat ya! Rifa pasti bisa! 💪✨</p>
+            </div>
+            <div style="text-align: center; margin-top: 30px; color: #999; font-style: italic;">
+                <p>Dari,</p>
+                <p><strong>Seseorang (ow,s;) 😘</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        let btnNoMoves = 0;
+
+        function nextSlide(slideNumber) {
+            document.getElementById('slide' + currentSlide).classList.remove('active');
+            document.getElementById('slide' + slideNumber).classList.add('active');
+            currentSlide = slideNumber;
+        }
+
+        function answerQuestion(answer) {
+            let responseDiv, nextBtn;
+            
+            if (answer.includes('4')) {
+                responseDiv = document.getElementById('response4');
+                nextBtn = document.getElementById('next4');
+                
+                if (answer === 'yes4') {
+                    responseDiv.innerHTML = '🎉 Alhamdulillah! Pertahankan ya! Semangat terus Rifa!';
+                } else {
+                    responseDiv.innerHTML = '💪 Gapapa, pelan-pelan aja. Yang penting kamu terus berusaha! You got this!';
+                }
+            } else if (answer.includes('5')) {
+                responseDiv = document.getElementById('response5');
+                nextBtn = document.getElementById('next5');
+                
+                if (answer === 'yes5') {
+                    responseDiv.innerHTML = '😊 Bagus! Tetap jaga senyum itu ya! Senyummu itu bikin hari-hariku ikut cerah lho!';
+                    document.getElementById('sticker2').classList.add('show');
+                } else {
+                    responseDiv.innerHTML = '😄 Yuk senyum sekarang! Tuh kan, makin cantik! Keep smiling ya!';
+                    document.getElementById('sticker2').classList.add('show');
+                }
+            }
+            
+            responseDiv.style.display = 'block';
+            nextBtn.style.display = 'block';
+            
+            document.querySelectorAll('#slide' + currentSlide + ' .btn-yes, #slide' + currentSlide + ' .btn-no').forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+            });
+        }
+
+        function runAway(event) {
+            const btnNo = document.getElementById('btnNo5');
+            const maxX = window.innerWidth - 150;
+            const maxY = window.innerHeight - 60;
+            
+            btnNoMoves++;
+            
+            if (btnNoMoves < 5) {
+                const randomX = Math.random() * maxX;
+                const randomY = Math.random() * maxY;
+                
+                btnNo.classList.add('run-away');
+                btnNo.style.left = randomX + 'px';
+                btnNo.style.top = randomY + 'px';
+                
+                if (btnNoMoves === 4) {
+                    btnNo.textContent = 'Ya udah deh... 😊';
+                }
+            } else {
+                answerQuestion('yes5');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const slide6 = document.getElementById('slide6');
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.backgroundColor = ['#667eea', '#764ba2', '#ffecd2', '#fcb69f'][Math.floor(Math.random() * 4)];
+                slide6.appendChild(confetti);
+            }
+        });
+    </script>
+</body>
+</html>
